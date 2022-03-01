@@ -301,6 +301,8 @@ public:
         imuBuf.addMeas(myImu(imuIn), imuIn->header.stamp.toSec());
     }
 
+    // 这里是清空，为什么是对齐呢？
+    // 有个猜测是第一帧点云来了之后，后面的IMU才进行启动计算位姿
     void alignFirstIMUtoPCL()
     {
         imuBuf.clean(pclInfoTime);
@@ -598,6 +600,7 @@ public:
 	    }
     }
 
+    // 这里感觉不是检查系统初始化结果，而是默认初始化完成，设置Reference Frame
     void checkSystemInitialization(){
         // 交换cornerPointsLessSharp和laserCloudCornerLast
         pcl::PointCloud<PointType>::Ptr laserCloudTemp = cornerPointsLessSharp;
@@ -1385,15 +1388,21 @@ public:
             {
                 alignFirstIMUtoPCL();
                 DownSizeGroudCloud();
+                // 计算得到曲率
                 calculateSmoothness();
+                // 避免遮挡点
                 markOccludedPoints();
+                // 抽取特征
                 extractFeatures();
+                // 将这块特征发布出去（为什么？应该是为了可视化）
                 publishCloud();
+                // 检查系统是否初始化完成？
                 checkSystemInitialization();
                 break;
             }
             case STATUS_SECOND_SCAN:
             {
+                // 这里用了互补滤波这个定义，需要明确和后面filter_predict的区别。
                 #ifdef USE_COMPLEMENTLY_FILTER
                 prediction();
                 #endif
@@ -1452,11 +1461,13 @@ int main(int argc, char** argv)
 
     ROS_INFO("\033[1;32m---->\033[0m Fusion Odometry Started.");
 
+    // 融合里程计，这里是ESKF的关键
     fusionOdometry FO;
 
     ros::Rate rate(400);
     while (ros::ok())
     {
+        // 每次循环操作
         FO.run();
         ros::spinOnce();
 

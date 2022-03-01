@@ -14,7 +14,8 @@ private:
 
     ros::Subscriber subLaserCloud;
     
-    ros::Publisher pubFullCloud;
+    // 主要看这里传递出去的点云
+    ros::Publisher pubFullCloud;                      // 所有的点云数据
     ros::Publisher pubFullInfoCloud;
 
     ros::Publisher pubGroundCloud;
@@ -30,6 +31,7 @@ private:
 
     pcl::PointCloud<PointType>::Ptr laserCloudIn; //雷达直接传出的点云
 
+    // 这里的投影指的是什么呢？
     pcl::PointCloud<PointType>::Ptr fullCloud; //投影后的点云
     pcl::PointCloud<PointType>::Ptr fullInfoCloud; //整体的点云
 
@@ -44,12 +46,14 @@ private:
     #ifdef IS_CLUSTERS
     pcl::search::KdTree<PointType>::Ptr tree;
     // pcl::KdTreeFLANN<PointType>::Ptr tree;
+    // 这里有一点，是用欧式聚类来做object检测
     std::vector<pcl::PointCloud<PointType>> clusters;//保存分割后的所有类 每一类为一个点云
     // 欧式聚类对检测到的障碍物进行分组
 	float clusterTolerance = 1.0;
 	int minsize = 50;
 	int maxsize = 3000;
 	std::vector<pcl::PointIndices> clusterIndices;// 创建索引类型对象
+  // 需要看后面在数据关联的时候又没有用到
 	pcl::EuclideanClusterExtraction<PointType> ec; // 欧式聚类对象
     #endif
 

@@ -46,6 +46,9 @@ void RGBpointAssociateToMap(PointType const *const pi,
   }
 }
 
+/************************************************************************
+ * !@brief 这里最主要的作用就是将livox点云拼接成机械激光点云数据
+ ************************************************************************/
 void LivoxMsgCbk1(const livox_ros_driver::CustomMsgConstPtr& livox_msg_in) {
   livox_data.push_back(livox_msg_in);
   // 第一帧则跳过
@@ -143,6 +146,7 @@ int main(int argc, char** argv) {
 
   ROS_INFO("start livox_repub");
 
+  // Yaw角不在?
   #ifndef INITIAL_BY_IMU
   Eigen::AngleAxisf imuPitch = Eigen::AngleAxisf(livox_mount_pitch, Eigen::Vector3f::UnitY());
   Eigen::AngleAxisf imuRoll = Eigen::AngleAxisf(livox_mount_roll, Eigen::Vector3f::UnitX());

@@ -53,6 +53,7 @@ link_directories(
 )
 
 # 这个是发布吧？
+# 这里需要注意的是：这里相当于4个进程，不是线程，所以效率更高
 add_executable(livox_repub src/livox_repub.cpp)
 target_link_libraries(livox_repub ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
@@ -61,7 +62,7 @@ add_executable(imageProjection src/imageProjection.cpp src/cluster.cpp)
 add_dependencies(imageProjection ${catkin_EXPORTED_TARGETS} cloud_msgs_gencpp)
 target_link_libraries(imageProjection ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
 
-# 这里去掉了，感觉有点奇怪，这里应该是做特征关联？
+# 这里去掉了，感觉有点奇怪，这里应该是做特征关联？->源码中直接删了
 # add_executable(featureAssociation src/featureAssociation.cpp)
 # add_dependencies(featureAssociation ${catkin_EXPORTED_TARGETS} cloud_msgs_gencpp)
 # target_link_libraries(featureAssociation ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})

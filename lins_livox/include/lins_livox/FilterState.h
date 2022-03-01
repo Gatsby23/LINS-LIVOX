@@ -1,6 +1,11 @@
 #ifndef _INCLUDE_FILTER_STATE_H_
 #define _INCLUDE_FILTER_STATE_H_
 #include <eigen3/Eigen/Dense>
+
+
+/****************************************************
+ *!@brief ESKF滤波中的状态数据结构
+ ****************************************************/
 class FilterState
 {
 public:
