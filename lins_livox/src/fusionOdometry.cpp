@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include "livox_ros_driver/CustomMsg.h"
 #include "lins_livox/common.h"
+// 这里MapRingBuffer是干什么用的呢？
 #include "lins_livox/MapRingBuffer.h"
 #include "lins_livox/FilterState.h"
 #include "lins_livox/myImu.h"
@@ -125,8 +126,10 @@ private:
     int skipFrameNum;
     int frameCount;
 
+    /// 这里的IMUMountAngle是什么不知道?
     Eigen::Quaternionf initImuMountAngle;
 
+    // 这里是F_t，G_t.
     Eigen::Matrix<float, 18, 18> F_t;
     Eigen::Matrix<float, 18, 12> G_t;
     Eigen::Matrix<float, 18, 18> P_t;
@@ -1359,6 +1362,7 @@ public:
 
     void run()
     {
+        // 计时程序
         std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
         // 如果有新数据进来则执行，否则不执行任何操作
         if(pclBuf.getSize() != 0 && pclInfoBuf.getSize() != 0 &&
